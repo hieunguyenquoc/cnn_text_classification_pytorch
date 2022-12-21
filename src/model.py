@@ -120,4 +120,4 @@ class CNNTextClassifier(nn.ModuleList):
 		# Activation function is applied
 		out = torch.sigmoid(out)
 		
-		return out.squeeze()
+		return out

@@ -53,8 +53,10 @@ class Train:
         self.load_train = DataLoader(training_set, batch_size=self.batch_size)
         self.load_test = DataLoader(test_set, batch_size=self.batch_size)
 
+        
         optimizer = optim.Adam(self.model.parameters(), lr=args.lr)
         print(self.model)
+        
         if torch.cuda.is_available:
             device = "cuda:0"
             print(device)
@@ -69,10 +71,11 @@ class Train:
 
             for x_batch, y_batch in self.load_train:
                 x = x_batch.type(torch.LongTensor)
-                y = y_batch.type(torch.FloatTensor)
+                y = y_batch.type(torch.FloatTensor).unsqueeze(1)
 
                 y_pred = self.model(x)
-
+                # print(np.shape(y))
+               
                 loss = F.binary_cross_entropy(y_pred, y)
 
                 optimizer.zero_grad()
@@ -81,10 +84,11 @@ class Train:
 
                 optimizer.step()
 
-                prediction.append(y_pred.squeeze().detach().numpy())
-            
+                prediction += list(y_pred.squeeze().detach().numpy())
+            # print(prediction[0])
         test_prediction = self.evaluation()
-
+        
+        # torch.save(self.model, "model/model_CNN.ckpt")
         train_accuracy = self.calculate_accuracy(self.y_train, prediction)
         test_accuracy = self.calculate_accuracy(self.y_test, test_prediction)
         print("Epoch : %.5f, Loss : %.5f, Train accuracy : %.5f, Loss accuracy : %.5f" % (epoch + 1, loss.item(), train_accuracy, test_accuracy))
@@ -101,8 +105,8 @@ class Train:
 
                 y_pred = self.model(x)
 
-                prediction.append(y_pred.squeeze().detach().numpy())
-        print(np.shape(prediction[0]))
+                prediction += list(y_pred.squeeze().detach().numpy())
+       
         return prediction
 
     @staticmethod
@@ -116,6 +120,8 @@ class Train:
                 true_positive += 1
             elif pred < 0.5 and true == 0:
                 true_negative += 1
+            else:
+                pass
         return (true_positive + true_negative) / len(ground_true) 
 
 if __name__ == "__main__":

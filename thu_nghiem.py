@@ -45,7 +45,8 @@ class Tst:
         self.y_train = self.preprocess.Y_train
         self.y_test = self.preprocess.Y_test
 
-if __name__ == "__main__":
-    args = parameter_parser()
-    out = Tst()
-    out.tst()
+# if __name__ == "__main__":
+#     args = parameter_parser()
+#     out = Tst()
+#     out.tst()
+

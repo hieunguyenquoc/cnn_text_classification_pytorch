@@ -1,4 +1,4 @@
-torch-gpu
+torch
 numpy
 pandas
 sklearn
