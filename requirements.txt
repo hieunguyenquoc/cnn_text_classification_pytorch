@@ -1,7 +1,6 @@
 torch
 numpy
 pandas
-sklearn
 tensorflow
 keras
 scikit-learn
